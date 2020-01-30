@@ -1,0 +1,112 @@
+﻿@{
+
+    Layout = "~/_Layout.cshtml";
+
+    var CustomerName = Request.Form["CustomerName"];
+    var choices = "";
+    var buttonPressed = Request.Form["formButton"];
+}
+
+<div>
+@section banner{
+    <h1>Exercise01: Basic Form Processing</h1>}
+</div>
+
+
+
+<div>
+   
+    @if (IsPost)
+    {
+        CustomerName = Request.Form["CustomerName"];
+        choices = Request.Form["CheckBoxGroup"];
+ 
+        if (buttonPressed.Equals("clear"))
+        {
+            choices = "";
+            CustomerName = null;
+        }
+        else
+        {
+       
+            choices = Request.Form["CheckBoxGroup"];
+            CustomerName = Request.Form["CustomerName"];
+            if (String.IsNullOrEmpty(CustomerName) && choices.IsEmpty())
+            {
+                <p>
+                    <span style="color:red">
+                        Please enter your name and select your choices
+                    </span>
+
+                </p>
+                CustomerName = null;
+                choices = "";
+            }
+            else
+            {
+                if (choices.IsEmpty())
+                {
+                    <p>
+                        <span style="color:red">
+                            Please make at least one choice
+                        </span>
+                    </p>
+                    choices = "";
+                }
+                else if (String.IsNullOrEmpty(CustomerName))
+                {
+                    <p>
+                        <span style="color:red">
+                            Please enter your name 
+                        </span>
+
+                    </p>
+                }
+                else
+                {
+                   
+                    <p>
+                        @CustomerName, you have selected these items below:
+                        <ul>
+                 
+                            @foreach (var entry in choices.Split(','))
+                            {
+                                <li>@entry</li>
+                            }
+                        </ul>
+                    </p>
+                }
+            }
+
+        }
+    }
+
+
+    <form id="EX01" action="" method="post">
+
+        <div class="row">
+            <div class="col-md-6">
+                <p>Customer Name: </p>
+                <input type="text" name="CustomerName" id="CustomerName" value="@CustomerName" placeholder="" /><br />
+                <br />
+                <button type="submit" id="formButton" name="formButton" value="submit" class="btn btn-primary"> Submit</button>
+                &nbsp;&nbsp;
+                <button type="submit" class="btn" id="formButton" name="formButton" value="clear">Reset</button>
+            </div>
+
+            <div class="col-md-6">
+                <label id="CheckBoxgroup">
+                    Choose your meal items
+                </label>
+                <br />
+
+                <input type="checkbox" name="CheckBoxGroup" value="Steak" @(Array.IndexOf(choices.Split(','), "Steak") >= 0 ? "checked" : "") />Steak<br />
+                <input type="checkbox" name="CheckBoxGroup" value="Seafood" @(Array.IndexOf(choices.Split(','), "Seafood") >= 0 ? "checked" : "") />Seafood<br />
+                <input type="checkbox" name="CheckBoxGroup" value="Vegetables" @(Array.IndexOf(choices.Split(','), "Vegetables") >= 0 ? "checked" : "") />Vegetables<br />
+
+            </div>
+
+        </div>
+    </form>
+</div>
+
